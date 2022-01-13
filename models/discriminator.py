@@ -4,6 +4,7 @@ from tensorflow.keras.models import Sequential
 from custom_layers.equalized_conv import EqualizedConv
 from custom_layers.equalized_dense import EqualizedDense
 from custom_layers.minibatch_std import minibatch_std
+from custom_layers.fade_in import fade_in
 
 class Discriminator:
     def __init__(self, start_res_log2, target_res_log2):

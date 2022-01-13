@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+from functools import partial
 
 # we use different batch size for different resolution, so larger image size
 # could fit into GPU memory. The keys is image resolution in log2

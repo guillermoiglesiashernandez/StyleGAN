@@ -1,10 +1,17 @@
 import tensorflow as tf
+import numpy as np
 from tensorflow import keras
 from train.style_gan import StyleGAN
 from train.plot_images import plot_images
 from data_loader.data_loader import create_dataloader
 
-def train(start_res=4, target_res=128, steps_per_epoch=5000, display_images=True, style_gan):    
+# we use different batch size for different resolution, so larger image size
+# could fit into GPU memory. The keys is image resolution in log2
+batch_sizes = {2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 8, 8: 4, 9: 2, 10: 1}
+# We adjust the train step accordingly
+train_step_ratio = {k: batch_sizes[2] / v for k, v in batch_sizes.items()}
+
+def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, display_images=True):
     opt_cfg = {"learning_rate": 1e-3, "beta_1": 0.0, "beta_2": 0.99, "epsilon": 1e-8}
 
     val_batch_size = 16
@@ -20,7 +27,7 @@ def train(start_res=4, target_res=128, steps_per_epoch=5000, display_images=True
             if res == start_res and phase == "TRANSITION":
                 continue
 
-            train_dl = create_dataloader(res)
+            train_dl = create_dataloader(res, data)
 
             steps = int(train_step_ratio[res_log2] * steps_per_epoch)
 

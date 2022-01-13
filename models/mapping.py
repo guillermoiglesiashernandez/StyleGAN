@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from custom_layers.equalized_dense import EqualizedDense
+from custom_layers.pixel_norm import pixel_norm
 
 def mapping(num_stages, input_shape=512):
     z = layers.Input(shape=(input_shape))

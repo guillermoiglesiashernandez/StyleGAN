@@ -4,6 +4,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow_addons.layers import InstanceNormalization
 from custom_layers.equalized_conv import EqualizedConv
 from custom_layers.add_noise import AddNoise
+from custom_layers.adain import AdaIN
+from custom_layers.fade_in import fade_in
 
 class Generator:
     def __init__(self, start_res_log2, target_res_log2):
