@@ -14,7 +14,7 @@ def plot_images(images, log2_res, fname=""):
     for row in range(grid_row):
         ax = axarr if grid_row == 1 else axarr[row]
         for col in range(grid_col):
-            ax[col].imshow(images[row * grid_col + col])
+            ax[col].imshow(images[row * grid_col + col], vmin=-1, vmax=1)
             ax[col].axis("off")
     plt.show()
     if fname:
