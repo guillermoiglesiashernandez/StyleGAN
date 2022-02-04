@@ -11,7 +11,7 @@ batch_sizes = {2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 8, 8: 4, 9: 2, 10: 1}
 # We adjust the train step accordingly
 train_step_ratio = {k: batch_sizes[2] / v for k, v in batch_sizes.items()}
 
-def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, display_images=True):
+def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, display_images=True, weights_path='checkpoints'):
     opt_cfg = {"learning_rate": 1e-3, "beta_1": 0.0, "beta_2": 0.99, "epsilon": 1e-8}
 
     val_batch_size = 16
@@ -44,10 +44,10 @@ def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, di
             prefix = f"res_{res}x{res}_{style_gan.phase}"
 
             ckpt_cb = keras.callbacks.ModelCheckpoint(
-                f"checkpoints/stylegan_{res}x{res}.ckpt",
-                save_weights_only=True,
+                filepath=weights_path + "/stylegan_{res}x{res}.ckpt",
+                save_weights_only=False,
                 verbose=0,
-            )
+            )            
             print(phase)
             style_gan.fit(
                 train_dl, epochs=1, steps_per_epoch=steps, callbacks=[ckpt_cb]
