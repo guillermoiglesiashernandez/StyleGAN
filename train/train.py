@@ -44,15 +44,17 @@ def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, di
             prefix = f"res_{res}x{res}_{style_gan.phase}"
 
             ckpt_cb = keras.callbacks.ModelCheckpoint(
-                filepath=weights_path + "/stylegan_{res}x{res}.ckpt",
-                save_weights_only=False,
+                f"checkpoints/stylegan_{res}x{res}.ckpt",
+                save_weights_only=True,
                 verbose=0,
-            )            
+            )
             print(phase)
             style_gan.fit(
                 train_dl, epochs=1, steps_per_epoch=steps, callbacks=[ckpt_cb]
             )
-
+            
+            style_gan.save_weights(weights_path + f'/stylegan_{res}x{res}.ckpt')
+            
             if display_images:
                 images = style_gan({"z": val_z, "noise": val_noise, "alpha": 1.0})
                 plot_images(images, res_log2)
