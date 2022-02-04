@@ -12,11 +12,10 @@ def download_data(url, output_dir):
     with ZipFile(output, "r") as zipobj:
         zipobj.extractall(output_dir)
 
-    # Create a dataset from our folder, and rescale the images to the [0-1] range:
-
+def create_dataset(path):
     ds_train = keras.preprocessing.image_dataset_from_directory(
-        output_dir, label_mode=None, image_size=(64, 64), batch_size=32
+        path, label_mode=None, image_size=(64, 64), batch_size=32
     )
     ds_train = ds_train.map(lambda x: x / 255.0)
-    
+
     return ds_train
