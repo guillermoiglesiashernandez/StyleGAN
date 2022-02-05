@@ -53,6 +53,11 @@ def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, di
                 train_dl, epochs=1, steps_per_epoch=steps, callbacks=[ckpt_cb]
             )
             
+            batch = next(iter(train_dl))
+            print(batch.shape)
+            plt.imshow(batch[0])
+            plt.axis("off")
+            
             style_gan.save_weights(weights_path + f'/stylegan_{res}x{res}.ckpt')
             
             if display_images:
