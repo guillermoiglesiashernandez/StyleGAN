@@ -16,6 +16,5 @@ def create_dataset(path):
     ds_train = keras.utils.image_dataset_from_directory(
         path, label_mode=None, image_size=(64, 64), batch_size=32
     )
-    ds_train = ds_train.map(lambda x: x / 255.0)
-
+    
     return ds_train
