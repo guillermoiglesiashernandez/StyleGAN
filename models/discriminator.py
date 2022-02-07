@@ -51,7 +51,7 @@ class Discriminator:
                 d_block = self.build_base(filter_num, res)
             else:
                 d_block = self.build_block(
-                    filter_num, self.filter_nums[res - 1], res
+                    filter_num, self.filter_nums[res/2], res
                 )
 
             self.d_blocks.append(d_block)
