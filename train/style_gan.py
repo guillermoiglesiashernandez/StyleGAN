@@ -10,6 +10,8 @@ class StyleGAN(tf.keras.Model):
     def __init__(self, z_dim=512, target_res=64, start_res=4):
         super(StyleGAN, self).__init__()
         self.z_dim = z_dim
+        self.start_res = start_res
+        self.target_res = target_res
 
         self.target_res_log2 = log2(target_res)
         self.start_res_log2 = log2(start_res)
