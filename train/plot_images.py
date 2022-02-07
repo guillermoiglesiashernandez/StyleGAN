@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 
-def plot_images(images, log2_res, fname=""):
-    scales = {2: 0.5, 3: 1, 4: 2, 5: 3, 6: 4, 7: 5, 8: 6, 9: 7, 10: 8}
-    scale = scales[log2_res]
+def plot_images(images, res, fname=""):
+    scales = {4: 16, 8: 16, 16: 16, 32: 16, 64: 16, 128: 8, 256: 4, 512: 2, 1024: 1}
+    scale = scales[res]
 
     grid_col = min(images.shape[0], int(32 // scale))
     grid_row = 1

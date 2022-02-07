@@ -8,7 +8,7 @@ from data_loader.data_loader import create_dataloader
 
 # we use different batch size for different resolution, so larger image size
 # could fit into GPU memory. The keys is image resolution in log2
-batch_sizes = {2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 8, 8: 4, 9: 2, 10: 1}
+batch_sizes = {4: 16, 8: 16, 16: 16, 32: 16, 64: 16, 128: 8, 256: 4, 512: 2, 1024: 1}
 # We adjust the train step accordingly
 train_step_ratio = {k: batch_sizes[2] / v for k, v in batch_sizes.items()}
 
@@ -30,7 +30,7 @@ def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, di
 
             train_dl = create_dataloader(res, data)
 
-            steps = int(train_step_ratio[res_log2] * steps_per_epoch)
+            steps = int(train_step_ratio[res] * steps_per_epoch)
 
             style_gan.compile(
                 d_optimizer=tf.keras.optimizers.Adam(**opt_cfg),
@@ -63,4 +63,4 @@ def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, di
             
             if display_images:
                 images = style_gan({"z": val_z, "noise": val_noise, "alpha": 1.0})
-                plot_images(images, res_log2)
+                plot_images(images, res)

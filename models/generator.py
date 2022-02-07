@@ -20,25 +20,25 @@ class Generator:
         self.noise_inputs = []
         # filter size to use at each stage, keys are log2(resolution)
         self.filter_nums = {
-            0:  512,
             1:  512,
-            2:  512,  # 4x4
-            3:  512,  # 8x8
-            4:  512,  # 16x16
-            5:  512,  # 32x32
-            6:  256,  # 64x64
-            7:  128,  # 128x128
-            8:  64,   # 256x256
-            9:  32,   # 512x512
-            10: 16,  # 1024x1024
+            2:  512,
+            4:  512,  # 4x4
+            8:  512,  # 8x8
+            16:  512,  # 16x16
+            32:  512,  # 32x32
+            64:  256,  # 64x64
+            128:  128,  # 128x128
+            256:  64,   # 256x256
+            512:  32,   # 512x512
+            1024: 16,  # 1024x1024
         }
 
         start_res = 2 ** start_res_log2
-        self.input_shape = (start_res, start_res, self.filter_nums[start_res_log2])
+        self.input_shape = (start_res, start_res, self.filter_nums[start_res])
         self.g_input = layers.Input(self.input_shape, name="generator_input")
 
         for i in range(start_res_log2, target_res_log2 + 1):
-            filter_num = self.filter_nums[i]
+            filter_num = self.filter_nums[2 ** i]
             res = 2 ** i
             self.noise_inputs.append(
                 layers.Input(shape=(res, res, 1), name=f"noise_{res}x{res}")
@@ -53,9 +53,9 @@ class Generator:
             self.to_rgb.append(to_rgb)
             is_base = i == self.start_res_log2
             if is_base:
-                input_shape = (res, res, self.filter_nums[i - 1])
+                input_shape = (res, res, self.filter_nums[2 ** (i - 1)])
             else:
-                input_shape = (2 ** (i - 1), 2 ** (i - 1), self.filter_nums[i - 1])
+                input_shape = (2 ** (i - 1), 2 ** (i - 1), self.filter_nums[2 ** (i - 1)])
             g_block = self.build_block(
                 filter_num, res=res, input_shape=input_shape, is_base=is_base
             )

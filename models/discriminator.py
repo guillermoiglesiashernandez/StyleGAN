@@ -13,17 +13,17 @@ class Discriminator:
         self.num_stages = target_res_log2 - start_res_log2 + 1
         # filter size to use at each stage, keys are log2(resolution)
         self.filter_nums = {
-            0:  512,
             1:  512,
-            2:  512,  # 4x4
-            3:  512,  # 8x8
-            4:  512,  # 16x16
-            5:  512,  # 32x32
-            6:  256,  # 64x64
-            7:  128,  # 128x128
-            8:  64,   # 256x256
-            9:  32,   # 512x512
-            10: 16,   # 1024x1024
+            2:  512,
+            4:  512,  # 4x4
+            8:  512,  # 8x8
+            16:  512,  # 16x16
+            32:  512,  # 32x32
+            64:  256,  # 64x64
+            128:  128,  # 128x128
+            256:  64,   # 256x256
+            512:  32,   # 512x512
+            1024: 16,   # 1024x1024
         }
         # list of discriminator blocks at increasing resolution
         self.d_blocks = []
@@ -32,7 +32,7 @@ class Discriminator:
 
         for res_log2 in range(self.start_res_log2, self.target_res_log2 + 1):
             res = 2 ** res_log2
-            filter_num = self.filter_nums[res_log2]
+            filter_num = self.filter_nums[res]
             from_rgb = Sequential(
                 [
                     layers.InputLayer(
@@ -51,7 +51,7 @@ class Discriminator:
                 d_block = self.build_base(filter_num, res)
             else:
                 d_block = self.build_block(
-                    filter_num, self.filter_nums[res_log2 - 1], res
+                    filter_num, self.filter_nums[res - 1], res
                 )
 
             self.d_blocks.append(d_block)
