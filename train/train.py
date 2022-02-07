@@ -10,7 +10,7 @@ from data_loader.data_loader import create_dataloader
 # could fit into GPU memory. The keys is image resolution in log2
 batch_sizes = {4: 16, 8: 16, 16: 16, 32: 16, 64: 16, 128: 8, 256: 4, 512: 2, 1024: 1}
 # We adjust the train step accordingly
-train_step_ratio = {k: batch_sizes[2] / v for k, v in batch_sizes.items()}
+train_step_ratio = {k: batch_sizes[4] / v for k, v in batch_sizes.items()}
 
 def train(style_gan, data, start_res=4, target_res=128, steps_per_epoch=5000, display_images=True, weights_path='checkpoints'):
     opt_cfg = {"learning_rate": 1e-3, "beta_1": 0.0, "beta_2": 0.99, "epsilon": 1e-8}
