@@ -21,8 +21,8 @@ class StyleGAN(tf.keras.Model):
         self.alpha = tf.Variable(1.0, dtype=tf.float32, trainable=False, name="alpha")
 
         self.mapping = mapping(num_stages=self.num_stages)
-        self.d_builder = Discriminator(self.start_res, self.target_res)
-        self.g_builder = Generator(self.start_res, self.target_res)
+        self.d_builder = Discriminator(self.start_res_log2, self.target_res_log2)
+        self.g_builder = Generator(self.start_res_log2, self.target_res_log2)
         self.g_input_shape = self.g_builder.input_shape
 
         self.phase = None
