@@ -32,6 +32,8 @@ class Generator:
             512:  32,   # 512x512
             1024: 16,  # 1024x1024
         }
+        
+        self.weights_loaded = False
 
         start_res = 2 ** start_res_log2
         self.input_shape = (start_res, start_res, self.filter_nums[start_res])
@@ -51,7 +53,7 @@ class Generator:
                 name=f"to_rgb_{res}x{res}",
             )
             self.to_rgb.append(to_rgb)
-            is_base = i == self.start_res_log2
+            is_base = (i == self.start_res_log2) and not(self.weights_loaded)
             if is_base:
                 input_shape = (res, res, self.filter_nums[2 ** (i - 1)])
             else:
@@ -83,7 +85,7 @@ class Generator:
         x = AdaIN()([x, w])
         return keras.Model([input_tensor, w, noise], x, name=f"genblock_{res}x{res}")
 
-    def grow(self, res_log2):
+    def grow(self, res_log2, weights_loaded=False):
         res = 2 ** res_log2
 
         num_stages = res_log2 - self.start_res_log2 + 1
@@ -92,7 +94,7 @@ class Generator:
         alpha = layers.Input(shape=(1), name="g_alpha")
         x = self.g_blocks[0]([self.g_input, w[:, 0], self.noise_inputs[0]])
 
-        if num_stages == 1:
+        if num_stages == 1 and weights_loaded == False:
             rgb = self.to_rgb[0](x)
         else:
             for i in range(1, num_stages - 1):

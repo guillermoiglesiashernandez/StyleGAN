@@ -29,11 +29,13 @@ class StyleGAN(tf.keras.Model):
         self.train_step_counter = tf.Variable(0, dtype=tf.int32, trainable=False)
 
         self.loss_weights = {"gradient_penalty": 10, "drift": 0.001}
+        
+        self.weights_loaded = False
 
     def grow_model(self, res):
         tf.keras.backend.clear_session()
         res_log2 = log2(res)
-        self.generator = self.g_builder.grow(res_log2)
+        self.generator = self.g_builder.grow(res_log2, self.weights_loaded)
         self.discriminator = self.d_builder.grow(res_log2)
         self.current_res_log2 = res_log2
         print(f"\nModel resolution:{res}x{res}")
@@ -172,5 +174,10 @@ class StyleGAN(tf.keras.Model):
 
         return images
         
+    def load_previous_model(self, path):
+        super(StyleGAN, self).load_weights(path)
+        self.weights_loaded = True
+        self.g_builder.weights_loaded = True
+    
 def log2(x):
     return int(np.log2(x))
